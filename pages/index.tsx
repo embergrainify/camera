@@ -30,7 +30,9 @@ export default function Home() {
   return (
     <>
       <main className='flex flex-col gap-4'>
-        <Cam />
+        {
+          Array.from(Array(10).keys()).map((item, i) => <Cam key={`cam-${i}`}/>)
+        }
       </main>
 
 

@@ -29,16 +29,13 @@ const cacheConfig = [
     handler: 'StaleWhileRevalidate',
     options: {
       cacheName: 'static-image-assets',
-      expiration: {
-        maxEntries: 64,
-        maxAgeSeconds: 24 * 60 * 60 // 24 hours
-      }
     }
   },
 ];
 
 const withPWA = require('next-pwa')({
   dest: 'public',
+  // disable: true,
   register: true,
   runtimeCaching: cacheConfig
 });
@@ -55,6 +52,38 @@ module.exports = withPWA({
   },
   optimizeFonts: false,
 });
+
+// const nextConfig = {
+//   webpack(config, options) {
+//     if (!options.isServer) {
+//       const workboxPlugin = new InjectManifest({
+//         swSrc: "./src/service-worker/index.ts",
+//         swDest: "../public/service-worker.js",
+//         // In dev, exclude everything.
+//         // This avoids irrelevant warnings about chunks being too large for caching.
+//         // In non-dev, use the default `exclude` option, don't override.
+//         ...(options.dev ? { exclude: [/./] } : undefined),
+//       })
+//       if (options.dev) {
+//         // Suppress the "InjectManifest has been called multiple times" warning by reaching into
+//         // the private properties of the plugin and making sure it never ends up in the state
+//         // where it makes that warning.
+//         // https://github.com/GoogleChrome/workbox/blob/v6/packages/workbox-webpack-plugin/src/inject-manifest.ts#L260-L282
+//         Object.defineProperty(workboxPlugin, "alreadyCalled", {
+//           get() {
+//             return false
+//           },
+//           set() {
+//             // do nothing; the internals try to set it to true, which then results in a warning
+//             // on the next run of webpack.
+//           },
+//         })
+//       }
+//       config.plugins.push(workboxPlugin)
+//     }
+//     return config
+//   }
+// }
 
 // const cacheConfig = [
 //   {
